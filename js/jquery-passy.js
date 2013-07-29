@@ -1,5 +1,6 @@
 (function($) {
     var passy = {
+        character: { DIGIT: 1, LOWERCASE: 2, UPPERCASE: 4, PUNCTUATION: 8 },
         strength: { LOW: 0, MEDIUM: 1, HIGH: 2, EXTREME: 3 },
 
         patterns: [
@@ -7,7 +8,7 @@
             'abcdefghijklmnopqrstuvwxyz',
             'qwertyuiopasdfghjklzxcvbnm',
             'azertyuiopqsdfghjklmwxcvbn',
-            '!@#$%^&*()'
+            '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
         ],
 
         threshold: {
@@ -17,8 +18,23 @@
         }
     };
 
-    if(Object.seal) Object.seal(passy.strength);
-    if(Object.freeze) Object.freeze(passy.strength);
+    passy.required = {
+        characters: passy.character.DIGIT | passy.character.LOWERCASE | passy.character.UPPERCASE,
+        length: {
+            min: 6,
+            max: Infinity
+        }
+    };
+
+    if(Object.seal) {
+        Object.seal(passy.character);
+        Object.seal(passy.strength);
+    }
+
+    if(Object.freeze) {
+        Object.freeze(passy.character);
+        Object.freeze(passy.strength);
+    }
 
     passy.analize = function(password) {
         var score = Math.floor(password.length * 2);
@@ -90,19 +106,51 @@
         return password;
     };
 
+    passy.contains = function(str, char) {
+        if(char === $.passy.character.DIGIT) {
+            return /\d/.test(str);
+        } else if(char === $.passy.character.LOWERCASE) {
+            return /[a-z]/.test(str);
+        } else if(char === $.passy.character.UPPERCASE) {
+            return /[A-Z]/.test(str);
+        } else if(char === $.passy.character.PUNCTUATION) {
+            return /[!"#$%&'()*+,\-./:;<=>?@[\\]\^_`{\|}~]/.test(str);
+        }
+    };
+
     var methods = {
         init: function(callback) {
             var $this = $(this);
 
             $this.on('change keyup', function() {
                 if(typeof callback !== 'function') return;
-                callback.call($this, $.passy.analize($this.val()));
+
+                var value = $this.val();
+                callback.call($this, $.passy.analize(value), $.passy.valid(value));
             });
         },
 
         generate: function(len) {
             this.val($.passy.generate(len));
             this.change();
+        },
+
+        valid: function() {
+            var valid = true;
+            var value = this.val();
+
+            if(!$.passy.required) return true;
+
+            if(value.length < $.passy.required.length.min) return false;
+            if(value.length > $.passy.required.length.max) return false;
+
+            for(var i in $.passy.character) {
+                if($.passy.required.characters & $.passy.character[i]) {
+                    valid = $.passy.contains(value, $.passy.character[i]) && valid;
+                }
+            }
+
+            return valid;
         }
     };
 
