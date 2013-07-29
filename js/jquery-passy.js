@@ -126,7 +126,7 @@
                 if(typeof callback !== 'function') return;
 
                 var value = $this.val();
-                callback.call($this, $.passy.analize(value), $.passy.valid(value));
+                callback.call($this, $.passy.analize(value), methods.valid.call(this));
             });
         },
 
