@@ -14,7 +14,7 @@
         threshold: {
             medium: 16,
             high: 22,
-            extreme: 42
+            extreme: 36
         }
     };
 
