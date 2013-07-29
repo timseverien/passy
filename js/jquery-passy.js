@@ -3,6 +3,8 @@
         character: { DIGIT: 1, LOWERCASE: 2, UPPERCASE: 4, PUNCTUATION: 8 },
         strength: { LOW: 0, MEDIUM: 1, HIGH: 2, EXTREME: 3 },
 
+        dictionary: [],
+
         patterns: [
             '0123456789',
             'abcdefghijklmnopqrstuvwxyz',
@@ -41,6 +43,8 @@
         var i = password.length;
 
         score += $.passy.analizePatterns(password);
+        score += $.passy.analizeDictionary(password);
+
         while(i--) score += $.passy.analizeCharacter(password.charAt(i));
 
         return $.passy.analizeScore(score);
@@ -76,12 +80,26 @@
         var chars = password.toLowerCase();
         var score = 0;
 
-        for(var p in $.passy.patterns) {
-            var pattern = $.passy.patterns[p].toLowerCase();
+        for(var i in $.passy.patterns) {
+            var pattern = $.passy.patterns[i].toLowerCase();
             score += $.passy.analizePattern(chars, pattern);
         }
 
         // patterns are bad man!
+        return score * -5;
+    };
+
+    passy.analizeDictionary = function(password) {
+        var chars = password.toLowerCase();
+        var score = 0;
+
+        for(var i in $.passy.dictionary) {
+            var word = $.passy.dictionary[i].toLowerCase();
+
+            if(password.indexOf(word) >= 0) score++;
+        }
+
+        // using words are bad too!
         return score * -5;
     };
 
