@@ -8,7 +8,7 @@
             'abcdefghijklmnopqrstuvwxyz',
             'qwertyuiopasdfghjklzxcvbnm',
             'azertyuiopqsdfghjklmwxcvbn',
-            '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+            '!#$*+-.:?@^'
         ],
 
         threshold: {
@@ -18,7 +18,7 @@
         }
     };
 
-    passy.required = {
+    passy.requirements = {
         characters: passy.character.DIGIT | passy.character.LOWERCASE | passy.character.UPPERCASE,
         length: {
             min: 6,
@@ -51,9 +51,9 @@
 
         if(code >= 97 && code <= 122) return 1; // lower case
         if(code >= 48 && code <= 57) return 2;  // numeric
-        if(code >= 65 && code <= 90) return 2;  // capital
-        if(code <= 126) return 3;               // punctuation
-        return 4;                               // foreign characters etc
+        if(code >= 65 && code <= 90) return 3;  // capital
+        if(code <= 126) return 4;               // punctuation
+        return 5;                               // foreign characters etc
     };
 
     passy.analizePattern = function(password, pattern) {
@@ -94,16 +94,30 @@
     };
 
     passy.generate = function(len) {
-        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()';
-        var password = '';
-        var index;
+        var chars = [
+            '0123456789',
+            'abcdefghijklmnopqrstuvwxyz',
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            '!#$&()*+<=>@[]^'
+        ];
+
+        var password = [];
+        var type, index;
+
+        len = Math.max(len, $.passy.requirements.length.min);
+        len = Math.min(len, $.passy.requirements.length.max);
 
         while(len--) {
-            index = Math.floor(Math.random() * chars.length);
-            password += chars.charAt(index);
+            type = len % chars.length;
+            index = Math.floor(Math.random() * chars[type].length);
+            password.push(chars[type].charAt(index));
         }
 
-        return password;
+        password.sort(function() {
+            return Math.random() * 2 - 1;
+        });
+
+        return password.join('');
     };
 
     passy.contains = function(str, char) {
@@ -116,6 +130,23 @@
         } else if(char === $.passy.character.PUNCTUATION) {
             return /[!"#$%&'()*+,\-./:;<=>?@[\\]\^_`{\|}~]/.test(str);
         }
+    };
+
+    passy.valid = function(str) {
+        var valid = true;
+
+        if(!$.passy.requirements) return true;
+
+        if(str.length < $.passy.requirements.length.min) return false;
+        if(str.length > $.passy.requirements.length.max) return false;
+
+        for(var i in $.passy.character) {
+            if($.passy.requirements.characters & $.passy.character[i]) {
+                valid = $.passy.contains(str, $.passy.character[i]) && valid;
+            }
+        }
+
+        return valid;
     };
 
     var methods = {
@@ -136,21 +167,7 @@
         },
 
         valid: function() {
-            var valid = true;
-            var value = this.val();
-
-            if(!$.passy.required) return true;
-
-            if(value.length < $.passy.required.length.min) return false;
-            if(value.length > $.passy.required.length.max) return false;
-
-            for(var i in $.passy.character) {
-                if($.passy.required.characters & $.passy.character[i]) {
-                    valid = $.passy.contains(value, $.passy.character[i]) && valid;
-                }
-            }
-
-            return valid;
+            return $.passy.valid(this.val());
         }
     };
 
