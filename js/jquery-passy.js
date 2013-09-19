@@ -50,8 +50,8 @@
         return $.passy.analizeScore(score);
     };
 
-    passy.analizeCharacter = function(char) {
-        var code = char.charCodeAt(0);
+    passy.analizeCharacter = function(character) {
+        var code = character.charCodeAt(0);
 
         if(code >= 97 && code <= 122) return 1; // lower case
         if(code >= 48 && code <= 57) return 2;  // numeric
@@ -138,14 +138,14 @@
         return password.join('');
     };
 
-    passy.contains = function(str, char) {
-        if(char === $.passy.character.DIGIT) {
+    passy.contains = function(str, character) {
+        if(character === $.passy.character.DIGIT) {
             return /\d/.test(str);
-        } else if(char === $.passy.character.LOWERCASE) {
+        } else if(character === $.passy.character.LOWERCASE) {
             return /[a-z]/.test(str);
-        } else if(char === $.passy.character.UPPERCASE) {
+        } else if(character === $.passy.character.UPPERCASE) {
             return /[A-Z]/.test(str);
-        } else if(char === $.passy.character.PUNCTUATION) {
+        } else if(character === $.passy.character.PUNCTUATION) {
             return /[!"#$%&'()*+,\-./:;<=>?@[\\]\^_`{\|}~]/.test(str);
         }
     };
