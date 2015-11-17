@@ -1,0 +1,135 @@
+@import url(//fonts.googleapis.com/css?family=Lora:400italic);
+@import url(//fonts.googleapis.com/css?family=Open+Sans:700,300);
+@import url(//fonts.googleapis.com/css?family=Source+Code+Pro);
+
+
+/**************************************************************
+ * BASE
+ **************************************************************/
+
+body {
+	font-family: 'Open sans', sans-serif;
+	font-weight: 300;
+	
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #406E89;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: bold;
+}
+
+pre {
+	background-color: #406E89;
+	padding: 1em;
+}
+
+code {
+	background-color: #406E89;
+	color: #fff;
+	font-family: 'Source Code Pro', monospace;
+	font-size: 0.75em;
+	tab-size: 4;
+}
+
+code .blur { color: rgba(255, 255, 255, 0.5); }
+
+a { color: #406E89; }
+a:hover { opacity: 0.9; }
+a:active { opacity: 0.8; }
+
+input {
+	border: 0;
+	color: #406E89;
+	outline: 0;
+	padding: 1em;
+}
+
+
+/**************************************************************
+ * LAYOUT
+ **************************************************************/
+
+.container {
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+.section {
+	margin-bottom: 8em;
+	margin-top: 8em;
+}
+
+
+/**************************************************************
+ * HEADER
+ **************************************************************/
+
+.header {
+	background-color: #406E89;
+	color: #fff;
+	padding: 8em 0 2em;
+	text-align: center;
+}
+
+.header__title {
+	color: #fff;
+	font-size: 4em;
+	margin: 0;
+	text-transform: uppercase;
+}
+
+.header__subtitle {
+	color: #fff;
+	font-family: 'Lora';
+	font-style: italic;
+	font-size: 1.2em;
+	font-weight: 400;
+	margin: 0;
+}
+
+
+/**************************************************************
+ * DEMO
+ **************************************************************/
+
+.demo {
+	margin-top: 4em;
+}
+
+.demo__field {
+	box-sizing: border-box;
+	font-weight: bold;
+	width: 80%;
+	width: calc(100% - 2em);
+	max-width: 16em;
+}
+
+
+/**************************************************************
+ * BUTTON
+ **************************************************************/
+
+.button {
+	background-color: #406E89;
+	border-radius: 0.125em;
+	color: #fff;
+	display: inline-block;
+	padding: 1em;
+	text-decoration: none;
+}
+
+
+/**************************************************************
+ * RESPONSIVE
+ **************************************************************/
+
+@media only screen and (min-width: 36em) {
+	.container {
+		margin-left: auto;
+		margin-right: auto;
+		width: 36em;
+	}
+}

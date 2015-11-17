@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Passy | A jQuery plugin for passwords</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="author" content="Tim Severien" />
+	<meta name="description" content="Passy helps you rating, generating and validating passwords" />
+
+	<meta name="og:title" content="Passy | a jQuery plugin for passwords" />
+	<meta name="og:site_name" content="Tim Severien" />
+	<meta name="og:url" content="//timseverien.github.io/passy/" />
+	<meta name="og:description" content="Passy helps you rating, generating and validating passwords" />
+	<meta name="og:image" content="//timseverien.github.io/passy/img/sm-image.gif" />
+
+	<link rel="stylesheet" href="css/normalize.css" />
+	<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="header">
+	<div class="container">
+		<h1 class="header__title">Passy</h1>
+		<h2 class="header__subtitle">A jQuery plugin for passwords</h2>
+
+		<div class="demo">
+			<p>Enter your password (It&rsquo;s safe, I promise)</p>
+
+			<input type="text" id="demo" class="demo__field" />
+			<div class="demo__output">
+				<p id="output">&nbsp;</p>
+			</div>
+		</div>
+	</div>
+</header>
+
+<main>
+	<div class="container section">
+		<h2>Download</h2>
+
+		<p>
+			<a href="https://github.com/timseverien/passy/archive/v1.0.zip" target="_blank" class="button">Download the archive</a> or <a href="https://github.com/timseverien/passy/" target="_blank">browse&nbsp;the&nbsp;code&nbsp;on&nbsp;GitHub</a>.
+		</p>
+	</div>
+
+	<div class="container section">
+		<h2>Basic usage</h2>
+
+<pre><code>$( 'input' ).passy(function( strength, valid ) {
+
+	<span class="blur">// Set color basd on validness and strength
+	if( valid ) {
+		if( strength &lt; $.passy.strength.HIGH ) {
+			color = 'orange';
+		} else {
+			color = 'green';
+		}
+	} else {
+		color = 'red';
+	}
+
+	$( this ).css( 'background-color', color );</span>
+});</code></pre>
+	</div>
+
+	<div class="container section">
+		<h2>Configuration</h2>
+		<p>Before calling <code>.passy()</code>, you can alter these settings:</p>
+
+<pre><code><span class="blur">// Requirements a inserted password should meet</span>
+$.passy.requirements = {
+
+	<span class="blur">// Character types a password should contain</span>
+	characters: [
+		$.passy.character.DIGIT,
+		$.passy.character.LOWERCASE,
+		$.passy.character.UPPERCASE,
+		$.passy.character.PUNCTUATION
+	],
+
+	<span class="blur">// A minimum and maximum length</span>
+	length: {
+		min: 8,
+		max: Infinity
+	}
+};
+
+<span class="blur">
+// Thresholds are numeric values representing
+// the estimated amount of days for a single computer
+// to brute force the password, assuming it processes
+// about 1,000,000 passwords per second</span>
+
+$.passy.threshold = {
+	medium: 365,
+	high: Math.pow( 365, 2 ),
+	extreme: Math.pow( 365, 5 )
+};</code></pre>
+	</div>
+
+	<div class="container section">
+		<h2>Methods</h2>
+
+		<p>Generate a password of a specific length:</p>
+		<pre><code>$( 'input' ).passy( 'generate', 16 );</code></pre>
+
+		<p>Check if a field&rsquo;s content is valid:</p>
+		<pre><code><span class="blur">if(</span>
+	$( 'input' ).passy( 'valid' )
+<span class="blur">) { ... }</span></code></pre>
+	</div>
+</main>
+
+<footer>
+	<div class="container section">
+		<h2>Got burning questions?</h2>
+
+		<p><a href="http://twitter.com/timseverien">Ask for help</a> on Twitter!</p>
+	</div>
+
+	<div class="container section">
+		<h2>Disclaimer</h2>
+
+		<p>Passy does not store, remember or share passwords. I cannot be held responsible when passwords are compromised.</p>
+	</div>
+</footer>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-passy.js"></script>
+
+<script>
+	var $demo = $('#demo'),
+		$output = $('#output'),
+
+		output = [
+			'This needs improvement',
+			'Getting there',
+			'This is better',
+			'Excellent!'
+		];
+
+	$demo.passy(function(strength, valid) {
+		$output.text(output[strength]);
+	});
+</script>
+</body>
+</html>
